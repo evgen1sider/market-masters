@@ -1,0 +1,17 @@
+{
+  "name": "market-masters",
+  "version": "1.0.0",
+  "description": "game based on Victoria 3 market",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "game",
+    "economy",
+    "trading",
+    "strategy"
+  ],
+  "author": "evgen1sider <evgen1sider@gmail.com>",
+  "license": "MIT"
+}
