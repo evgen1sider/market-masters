@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   function loadContent(language) {
     const contentDiv = document.getElementById('content');
-    const page = window.location.pathname.split('/').pop().split('.')[0];
-    fetch(`/src/contents/${page}-content-${language}.html`)
-      .then(response => response.text())
-      .then(data => {
-        contentDiv.innerHTML = data;
-      });
+    if (contentDiv) {
+      const page = window.location.pathname.split('/').pop().split('.')[0];
+      fetch(`/src/contents/${page}-content-${language}.html`)
+        .then(response => response.text())
+        .then(data => {
+          contentDiv.innerHTML = data;
+        });
+    }
   }
 
   // Initial load
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // Display username if logged in
   const username = localStorage.getItem('username');
   if (username) {
-    const userLink = document.querySelector('.user-controls a[href="' + (window.location.pathname.endsWith('index.html') ? 'src/pages/user.html' : 'user.html') + '"]');
+    const userLink = document.querySelector('.user-controls a[href="user.html"]');
     if (userLink) {
       userLink.textContent = username;
     }
