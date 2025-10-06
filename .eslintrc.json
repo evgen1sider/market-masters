@@ -9,6 +9,11 @@
       "files": ["src/scripts/utils.js", "src/scripts/**/__tests__/*.js"],
       "env": { "node": true, "browser": false },
       "parserOptions": { "sourceType": "script" }
+    },
+    {
+      "files": ["scripts/**/*.js"],
+      "env": { "node": true, "browser": false },
+      "parserOptions": { "sourceType": "script" }
     }
   ],
   "extends": "eslint:recommended",

@@ -6,6 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-18.x-brightgreen.svg)](https://nodejs.org/)
 [![Issues](https://img.shields.io/github/issues/evgen1sider/market-masters)](https://github.com/evgen1sider/market-masters/issues)
+[![Codecov](https://codecov.io/gh/evgen1sider/market-masters/branch/develop/graph/badge.svg?token=)](https://codecov.io/gh/evgen1sider/market-masters)
 
 **My Economic Game** – це захоплююча економічна гра, в якій гравці можуть торгувати, інвестувати та розвивати свій бізнес!
 
@@ -40,6 +41,20 @@ npm run lint
 
 # Тести (Jest)
 npm test
+```
+
+## Політика кінців рядків
+У цьому репозиторії є файл `.gitattributes`, який забезпечує збереження LF (`\n`) у репозиторії для коду та конфігів. Щоб локально перевірити наявність CRLF у файлах можна запустити:
+
+```sh
+npm run check:eol
+```
+
+Якщо скрипт знайде файли з CRLF, виконайте нормалізацію:
+
+```sh
+git add --renormalize .
+git commit -m "Normalize line endings"
 ```
 
  ##  Технології
