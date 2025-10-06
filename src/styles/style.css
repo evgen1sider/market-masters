@@ -149,6 +149,12 @@ input:focus {
   transform: translateY(-1px);
 }
 
+/* Active link */
+.nav a.active {
+  background: rgb(255 255 255 / 8%);
+  box-shadow: inset 0 -2px 0 rgb(255 255 255 / 6%);
+}
+
 #language-toggle {
   padding: 6px 10px;
   border-radius: 8px;
@@ -274,4 +280,17 @@ main {
 
 .text-center {
   text-align: center;
+}
+
+/* Mobile collapse behavior for nav list */
+@media (width <= 640px) {
+  .nav ul#nav-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 260ms ease;
+  }
+
+  .nav.nav-open ul#nav-list {
+    max-height: 1000px;
+  }
 }

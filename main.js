@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navToggle.addEventListener('click', () => {
       const expanded = navToggle.getAttribute('aria-expanded') === 'true';
       navToggle.setAttribute('aria-expanded', String(!expanded));
-      nav.classList.toggle('nav--open');
+      nav.classList.toggle('nav-open');
     });
   }
 });
