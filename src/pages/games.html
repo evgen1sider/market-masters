@@ -47,6 +47,20 @@
     <a href="news.html" data-lang-en="News" data-lang-ua="Новини">News</a>
   </footer>
   <script src="../scripts/game.js"></script>
-  <script src="../../main.js"></script>
+  <!-- main and utils are loaded from the root index.html; fallback loader for standalone use -->
+  <script>
+    (function(){
+      if (typeof Utils === 'undefined') {
+        var s1 = document.createElement('script');
+        s1.src = '../scripts/utils.js';
+        s1.onload = function(){
+          var s2 = document.createElement('script');
+          s2.src = '../../main.js';
+          document.body.appendChild(s2);
+        };
+        document.body.appendChild(s1);
+      }
+    })();
+  </script>
 </body>
 </html>

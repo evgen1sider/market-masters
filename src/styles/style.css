@@ -97,6 +97,23 @@ input:focus {
   justify-content: space-between;
 }
 
+/* Hamburger button (hidden on wide screens, visible on small screens) */
+#nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#nav-toggle:focus {
+  outline: 3px solid rgb(255 255 255 / 14%);
+  outline-offset: 2px;
+}
+
 /* .nav a color/margin merged into combined .nav a block below */
 
 .nav .brand {
@@ -282,8 +299,65 @@ main {
   text-align: center;
 }
 
+/* Loading spinner */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 4px solid rgb(0 0 0 / 8%);
+  border-top-color: var(--primary);
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Loading text next to spinner */
+.loading-text {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Content fade-in */
+.main > .container, #content {
+  transition: opacity 320ms ease, transform 320ms ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#content:not(.content-loaded) {
+  opacity: 0.01;
+  transform: translateY(6px);
+}
+
+#content.content-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Mobile collapse behavior for nav list */
-@media (width <= 640px) {
+@media (width <= 767px) {
   .nav ul#nav-list {
     max-height: 0;
     overflow: hidden;
@@ -292,5 +366,40 @@ main {
 
   .nav.nav-open ul#nav-list {
     max-height: 1000px;
+  }
+}
+
+/* On larger screens show the nav list and hide the hamburger */
+@media (width >= 768px) {
+  #nav-toggle {
+    display: none;
+  }
+
+  .nav ul#nav-list {
+    display: flex !important;
+    max-height: none;
+    overflow: visible;
+    flex-direction: row;
+  }
+}
+
+/* Ensure hamburger is visible on small screens */
+@media (width <= 767px) {
+  #nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav ul#nav-list {
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 10px;
   }
 }
