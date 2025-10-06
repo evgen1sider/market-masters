@@ -14,18 +14,35 @@
   <!-- Theme color and MS tile -->
   <meta name="theme-color" content="#ffffff">
   <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="color-scheme" content="light dark">
   <link rel="stylesheet" href="src/styles/style.css">
 </head>
 <body>
   <header>
     <nav class="nav">
-      <a href="index.html" data-lang-en="Home" data-lang-ua="Головна">Home</a> |
-      <a href="src/pages/about.html" data-lang-en="About" data-lang-ua="Про нас">About</a> |
-      <a href="src/pages/games.html" data-lang-en="Games" data-lang-ua="Гри">Games</a> |
-      <a href="src/pages/news.html" data-lang-en="News" data-lang-ua="Новини">News</a>
-      <div class="user-controls">
-        <a href="src/pages/user.html" data-lang-en="User" data-lang-ua="Користувач">User</a>
-        <button id="language-toggle">EN/UA</button>
+      <div class="container">
+        <button id="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">☰</button>
+        <ul>
+        <li>
+          <a href="index.html" data-lang-en="Home" data-lang-ua="Головна">Home</a>
+        </li>
+        <li>
+          <a href="src/pages/about.html" data-lang-en="About" data-lang-ua="Про нас">About</a>
+        </li>
+        <li>
+          <a href="src/pages/games.html" data-lang-en="Games" data-lang-ua="Ігри">Games</a>
+        </li>
+        <li>
+          <a href="src/pages/news.html" data-lang-en="News" data-lang-ua="Новини">News</a>
+        </li>
+        <li>
+          <a href="src/pages/user.html" data-lang-en="User" data-lang-ua="Користувач">User</a>
+        </li>
+        <li>
+          <button id="language-toggle">EN/UA</button>
+        </li>
+        </ul>
       </div>
     </nav>
   </header>

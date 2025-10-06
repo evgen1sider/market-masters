@@ -72,4 +72,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('nav-toggle');
+  const nav = document.querySelector('nav.nav');
+  if (navToggle && nav) {
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      nav.classList.toggle('nav--open');
+    });
+  }
 });
