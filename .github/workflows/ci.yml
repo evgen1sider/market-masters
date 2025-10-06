@@ -34,7 +34,8 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info
-          fail_ci_if_error: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          # Don't fail the entire workflow if the upload fails (e.g., token missing)
+          fail_ci_if_error: false
+          # The action accepts 'token' input; pass it only if the secret exists to avoid workflow validation issues
+          token: ${{ secrets.CODECOV_TOKEN }}
           
