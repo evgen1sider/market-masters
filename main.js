@@ -1,54 +1,75 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-  console.log('The page has fully loaded');
-
-  const languageToggle = document.getElementById('language-toggle');
+/* global Utils */
+document.addEventListener('DOMContentLoaded', () => {
   let currentLanguage = localStorage.getItem('language') || 'en';
 
-  languageToggle.addEventListener('click', () => {
-    currentLanguage = currentLanguage === 'en' ? 'ua' : 'en';
-    localStorage.setItem('language', currentLanguage);
-    updateLanguage(currentLanguage);
-  });
+  const languageToggle = document.getElementById('language-toggle');
+  if (languageToggle) {
+    languageToggle.addEventListener('click', () => {
+      currentLanguage = currentLanguage === 'en' ? 'ua' : 'en';
+      localStorage.setItem('language', currentLanguage);
+      updateLanguage(currentLanguage);
+      document.documentElement.lang = currentLanguage === 'en' ? 'en' : 'uk';
+      languageToggle.textContent = currentLanguage.toUpperCase();
+    });
+  }
 
   function updateLanguage(language) {
     document.querySelectorAll('[data-lang-en]').forEach(element => {
-      element.textContent = element.getAttribute(`data-lang-${language}`);
+      const attr = `data-lang-${language}`;
+      if (element.hasAttribute(attr)) {
+        element.textContent = element.getAttribute(attr);
+      }
     });
     loadContent(language);
   }
 
   function loadContent(language) {
     const contentDiv = document.getElementById('content');
-    if (contentDiv) {
-      const page = window.location.pathname.split('/').pop().split('.')[0];
-      fetch(`/src/contents/${page}-content-${language}.html`)
-        .then(response => response.text())
-        .then(data => {
-          contentDiv.innerHTML = data;
-        });
-    }
+    if (!contentDiv) return;
+
+    const page = Utils.getPageName(window.location.pathname);
+    const url = Utils.buildContentUrl(page, language, window.location.pathname);
+
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
+        return res.text();
+      })
+      .then(html => { contentDiv.innerHTML = html; })
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        contentDiv.innerHTML = '<p class="error">Content failed to load.</p>';
+      });
   }
 
   // Initial load
   updateLanguage(currentLanguage);
 
-  // Registration form logic
+  // Registration form logic (safe guards)
   const registerForm = document.getElementById('register-form');
   if (registerForm) {
     registerForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const username = document.getElementById('username').value;
-      localStorage.setItem('username', username);
-      window.location.href = 'user.html';
+      const usernameInput = document.getElementById('username');
+      const username = usernameInput ? usernameInput.value : '';
+      if (username) {
+        localStorage.setItem('username', username);
+        // try to navigate relative to current page
+        window.location.href = 'user.html';
+      }
     });
   }
 
   // Display username if logged in
   const username = localStorage.getItem('username');
   if (username) {
-    const userLink = document.querySelector('.user-controls a[href="user.html"]');
-    if (userLink) {
-      userLink.textContent = username;
-    }
+    const userLinks = document.querySelectorAll('.user-controls a');
+    userLinks.forEach(link => {
+      const href = link.getAttribute('href') || '';
+      if (href.includes('user.html')) {
+        link.textContent = username;
+      }
+    });
   }
 });

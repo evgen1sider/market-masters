@@ -1,5 +1,12 @@
 # 🏦 My Economic Game
 
+[![CI](https://github.com/evgen1sider/market-masters/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/evgen1sider/market-masters/actions/workflows/ci.yml?query=branch%3Adevelop)
+
+<!-- Additional badges -->
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node](https://img.shields.io/badge/node-18.x-brightgreen.svg)](https://nodejs.org/)
+[![Issues](https://img.shields.io/github/issues/evgen1sider/market-masters)](https://github.com/evgen1sider/market-masters/issues)
+
 **My Economic Game** – це захоплююча економічна гра, в якій гравці можуть торгувати, інвестувати та розвивати свій бізнес!
 
 ## 🚀 Функції гри
@@ -16,6 +23,23 @@ git clone https://github.com/your-username/my-economic-game.git
 cd my-economic-game
 npm install
 npm start
+```
+
+## Локальний запуск у цьому репозиторії
+Якщо ви працюєте з цим репозиторієм, запустіть:
+
+```sh
+# Встановити залежності (dev dependencies для lint/tests)
+npm install
+
+# Запустити простий статичний сервер
+npm start
+
+# Лінт
+npm run lint
+
+# Тести (Jest)
+npm test
 ```
 
  ##  Технології

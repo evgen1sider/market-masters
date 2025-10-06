@@ -4,7 +4,14 @@
   "description": "game based on Victoria 3 market",
   "main": "main.js",
   "scripts": {
-    "test": "test"
+    "start": "npx http-server . -p 8080",
+  "lint": "npx eslint . --ext .js && npx htmlhint \"index.html\" \"src/pages/**/*.html\"",
+    "test": "jest --runInBand"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "htmlhint": "^0.14.2"
   },
   "keywords": [
     "game",
