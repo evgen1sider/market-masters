@@ -8,34 +8,38 @@
 </head>
 <body>
   <header>
-    <nav class="nav">
-      <a href="../../../index.html" data-lang-en="Home" data-lang-ua="Головна">Home</a> |
-      <a href="../about.html" data-lang-en="About" data-lang-ua="Про нас">About</a> |
-      <a href="../games.html" data-lang-en="Games" data-lang-ua="Гри">Games</a> |
-      <a href="../news.html" data-lang-en="News" data-lang-ua="Новини">News</a>
-      <div class="user-controls">
-        <a href="../user.html" data-lang-en="User" data-lang-ua="Користувач">User</a>
-        <button id="language-toggle">EN/UA</button>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <button id="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Toggle navigation">☰</button>
+        <ul id="nav-list">
+          <li><a href="../../../index.html" data-lang-en="Home" data-lang-ua="Головна">Home</a></li>
+          <li><a href="../about.html" data-lang-en="About" data-lang-ua="Про нас">About</a></li>
+          <li><a href="../games.html" data-lang-en="Games" data-lang-ua="Гри">Games</a></li>
+          <li><a href="../news.html" data-lang-en="News" data-lang-ua="Новини">News</a></li>
+          <li class="user-controls"><a href="../user.html" data-lang-en="User" data-lang-ua="Користувач">User</a><button id="language-toggle">EN/UA</button></li>
+        </ul>
       </div>
     </nav>
   </header>
   <main class="main">
     <h1 data-lang-en="Market Game" data-lang-ua="Гра Ринок">Market Game</h1>
     <div class="container">
-      <div id="game">
-        <div id="balance" data-lang-en="Balance: £5000" data-lang-ua="Баланс: £5000">Balance: £5000</div>
-        <div id="market">
+      <div id="game" class="grid">
+        <div id="balance" class="card" role="status" aria-live="polite" data-lang-en="Balance: £5000" data-lang-ua="Баланс: £5000">Balance: £5000</div>
+
+        <section id="market" class="card">
           <h2 data-lang-en="Market" data-lang-ua="Ринок">Market</h2>
-          <div id="products">
+          <div id="products" class="grid">
             <!-- Products will be listed here -->
           </div>
-        </div>
-        <div id="warehouse">
+        </section>
+
+        <section id="warehouse" class="card">
           <h2 data-lang-en="Warehouse" data-lang-ua="Склад">Warehouse</h2>
           <div id="inventory">
             <!-- Inventory will be listed here -->
           </div>
-        </div>
+        </section>
       </div>
     </div>
   </main>
