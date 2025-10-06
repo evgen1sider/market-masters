@@ -4,7 +4,34 @@
   "description": "game based on Victoria 3 market",
   "main": "main.js",
   "scripts": {
-    "test": "test"
+    "start": "npx http-server . -p 8080",
+    "check:eol": "node scripts/check-eol.js",
+  "lint": "npx eslint . --ext .js && npx stylelint \"src/styles/**/*.css\" && npx htmlhint \"index.html\" \"src/pages/**/*.html\"",
+    "test": "jest --runInBand --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "htmlhint": "^0.14.2",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.0",
+    "stylelint": "^16.23.0",
+    "stylelint-config-standard": "^39.0.0"
+  },
+  "prepare": "husky install",
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint --fix"
+    ],
+    "src/styles/**/*.css": [
+      "npx stylelint --fix || true"
+    ],
+    "index.html": [
+      "npx htmlhint"
+    ],
+    "src/pages/**/*.html": [
+      "npx htmlhint"
+    ]
   },
   "keywords": [
     "game",

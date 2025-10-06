@@ -1,3 +1,10 @@
+node_modules/
+coverage/
+dist/
+build/
+/.idea/
+.vscode/
+/.DS_Store
 # Ігнорування директорії з залежностями
 node_modules/
 
