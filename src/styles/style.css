@@ -38,6 +38,14 @@ body {
   padding: 28px 0;
 }
 
+/* Center the content area and make inner content constrained */
+#content {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 980px;
+}
+
 @media (width <= 640px) {
   .container {
     padding: 18px 0;
@@ -225,6 +233,45 @@ main {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 18px;
+}
+
+.hero.card {
+  text-align: center;
+  padding: 36px 22px;
+}
+
+.hero .lead {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin: 12px 0 18px;
+}
+
+.cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.features.grid {
+  margin-top: 18px;
+}
+
+.features .card {
+  padding: 18px;
+  text-align: left;
+}
+
+.about.card {
+  margin-top: 18px;
+}
+
+/* Ensure images inside content scale and center */
+#content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px auto;
 }
 
 .grid {
