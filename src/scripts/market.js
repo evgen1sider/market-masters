@@ -135,10 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
     finishBtn.id = 'finish-session';
     finishBtn.textContent = 'Finish & Submit Score';
     finishRow.appendChild(finishBtn);
-    // insert after balance element
-    const balanceCard = document.getElementById('balance');
-    if (balanceCard && balanceCard.parentNode) {
-      balanceCard.parentNode.insertBefore(finishRow, balanceCard.nextSibling);
+    // append to the game container so it remains visible
+    if (gameContainer) {
+      gameContainer.appendChild(finishRow);
     }
 
     finishBtn.addEventListener('click', () => {
