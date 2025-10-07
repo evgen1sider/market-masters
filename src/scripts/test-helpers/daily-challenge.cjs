@@ -1,14 +1,13 @@
-/* global module */
-import { LCG, hashStringToSeed } from './seeded.js';
+const { LCG, hashStringToSeed } = require('./seeded.cjs');
 
 const STORAGE_KEY = 'mm_daily_leaderboard';
 
-export function todaysSeed(date = new Date()) {
+function todaysSeed(date = new Date()) {
   const ymd = `${date.getUTCFullYear()}-${date.getUTCMonth()+1}-${date.getUTCDate()}`;
   return hashStringToSeed(ymd);
 }
 
-export function generateMarket(seed) {
+function generateMarket(seed) {
   const rnd = LCG(seed);
   const products = [];
   const names = ['Apples', 'Bread', 'Coal', 'Steel', 'Silk', 'Spices'];
@@ -25,19 +24,15 @@ export function generateMarket(seed) {
   return products;
 }
 
-export function saveScore({ name = 'Anon', score = 0, seed = 0 }) {
+function saveScore({ name = 'Anon', score = 0, seed = 0 }) {
   const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   all.push({ name, score, seed, ts: Date.now() });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
 }
 
-export function getLeaderboard() {
+function getLeaderboard() {
   const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  // sort desc and return top 10
   return all.sort((a, b) => b.score - a.score).slice(0, 10);
 }
 
-// CommonJS fallback for Jest test environments that use require()
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { todaysSeed, generateMarket, saveScore, getLeaderboard };
-}
+module.exports = { todaysSeed, generateMarket, saveScore, getLeaderboard };

@@ -22,5 +22,23 @@ document.addEventListener('click', (evt) => {
   }
 });
 
-// Expose for debugging
-window.DailyChallenge = { todaysSeed, generateMarket, saveScore, getLeaderboard };
+function renderLeaderboardInto(root) {
+  const list = getLeaderboard();
+  root.innerHTML = '';
+  if (list.length === 0) {
+    const p = document.createElement('p');
+    p.textContent = 'No scores yet.';
+    root.appendChild(p);
+    return;
+  }
+  const ul = document.createElement('ol');
+  list.forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = `${r.name} — ${r.score}`;
+    ul.appendChild(li);
+  });
+  root.appendChild(ul);
+}
+
+// Expose for debugging and UI wiring
+window.DailyChallenge = { todaysSeed, generateMarket, saveScore, getLeaderboard, renderLeaderboardInto };

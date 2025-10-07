@@ -1,3 +1,4 @@
+/* global module */
 // Simple seeded random (LCG) — deterministic per seed
 export function LCG(seed) {
   let state = seed >>> 0;
@@ -15,4 +16,9 @@ export function hashStringToSeed(str) {
     h = Math.imul(h, 16777619) >>> 0;
   }
   return h >>> 0;
+}
+
+// CommonJS fallback for test environments (Jest) that use require()
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { LCG, hashStringToSeed };
 }

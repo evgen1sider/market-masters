@@ -62,6 +62,27 @@ document.addEventListener('DOMContentLoaded', () => {
     actions.appendChild(seedLabel);
   }());
 
+  // Ensure there's a leaderboard container inside .game-actions and return it
+  function ensureLeaderboardContainer() {
+    const gameContainer = document.getElementById('game');
+    if (!gameContainer) return null;
+    const parent = gameContainer.parentNode;
+    let actions = parent.querySelector('.game-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'game-actions';
+      parent.insertBefore(actions, gameContainer.nextSibling);
+    }
+    let lb = actions.querySelector('#daily-leaderboard');
+    if (!lb) {
+      lb = document.createElement('div');
+      lb.id = 'daily-leaderboard';
+      lb.className = 'daily-leaderboard';
+      actions.appendChild(lb);
+    }
+    return lb;
+  }
+
   function updateMarket() {
     productsElement.innerHTML = '';
     products.forEach(product => {
@@ -152,6 +173,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     actions.appendChild(finishRow);
 
+    // Create / render leaderboard if available
+    const lb = ensureLeaderboardContainer();
+    if (lb && window.DailyChallenge && typeof window.DailyChallenge.renderLeaderboardInto === 'function') {
+      try {
+        window.DailyChallenge.renderLeaderboardInto(lb);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to render daily leaderboard:', e);
+      }
+    }
+
     finishBtn.addEventListener('click', () => {
       // compute simple score: balance + inventory value
       let inventoryValue = 0;
@@ -232,7 +264,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const seed = window.__mm_daily_seed || Number(localStorage.getItem('mm_daily_seed')) || 0;
         window.DailyChallenge.saveScore({ name, score, seed });
         alert('Score saved locally.');
+        // clear the daily seed (session complete)
         localStorage.removeItem('mm_daily_seed');
+        // refresh the inline leaderboard if present
+        try {
+          const lbEl = document.getElementById('daily-leaderboard');
+          if (lbEl && window.DailyChallenge && typeof window.DailyChallenge.renderLeaderboardInto === 'function') {
+            window.DailyChallenge.renderLeaderboardInto(lbEl);
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Error refreshing leaderboard after submit:', e);
+        }
       } else {
         alert('Daily leaderboard unavailable.');
       }
