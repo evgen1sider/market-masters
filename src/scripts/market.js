@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inventoryElement = document.getElementById('inventory');
 
   let balance = 5000;
-  const products = [
+  let products = [
     { name: 'Grain', price: 10, quantity: 1000, translations: { en: 'Grain', ua: 'Зерно' } },
     { name: 'Cloth', price: 10, quantity: 1000, translations: { en: 'Cloth', ua: 'Тканина' } },
     { name: 'Clothes', price: 20, quantity: 1000, translations: { en: 'Clothes', ua: 'Одяг' } },
@@ -14,6 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Instruments', price: 30, quantity: 1000, translations: { en: 'Instruments', ua: 'Інструменти' } }
   ];
   const inventory = {};
+
+  // If a daily seed was provided (from Daily Challenge), initialize products deterministically
+  const dailySeed = localStorage.getItem('mm_daily_seed');
+  if (dailySeed && window.DailyChallenge && typeof window.DailyChallenge.generateMarket === 'function') {
+    try {
+      const seedNum = Number(dailySeed) || 0;
+      const dailyProducts = window.DailyChallenge.generateMarket(seedNum);
+      // Map dailyProducts to the format used in this script
+      products = dailyProducts.map(p => ({
+        name: p.name,
+        price: Math.max(1, Math.round(p.price)),
+        quantity: 1000,
+        translations: { en: p.name, ua: p.name }
+      }));
+      // expose the seed so score submission can reference it
+      window.__mm_daily_seed = seedNum;
+    } catch (e) {
+      // ignore and fall back to default products
+      // eslint-disable-next-line no-console
+      console.error('Failed to initialize daily market:', e);
+    }
+  }
 
   function updateBalance() {
     balanceElement.setAttribute('data-lang-en', `Balance: £${balance}`);
@@ -71,6 +93,47 @@ document.addEventListener('DOMContentLoaded', () => {
       element.textContent = element.getAttribute(`data-lang-${language}`);
     });
   }
+
+  // Add a finish/submit button for Daily Challenge sessions
+  (function addFinishButton() {
+    const gameContainer = document.getElementById('game');
+    if (!gameContainer) return;
+    const finishRow = document.createElement('div');
+    finishRow.className = 'cta-row';
+    const finishBtn = document.createElement('button');
+    finishBtn.className = 'btn secondary';
+    finishBtn.id = 'finish-session';
+    finishBtn.textContent = 'Finish & Submit Score';
+    finishRow.appendChild(finishBtn);
+    // insert after balance element
+    const balanceCard = document.getElementById('balance');
+    if (balanceCard && balanceCard.parentNode) {
+      balanceCard.parentNode.insertBefore(finishRow, balanceCard.nextSibling);
+    }
+
+    finishBtn.addEventListener('click', () => {
+      // compute simple score: balance + inventory value
+      let inventoryValue = 0;
+      for (const [name, qty] of Object.entries(inventory)) {
+        const prod = products.find(p => p.name === name);
+        if (prod) inventoryValue += prod.price * qty;
+      }
+      const score = balance + inventoryValue;
+      let player = prompt('Enter your name for the leaderboard (max 12 chars):', 'Player');
+      if (!player) player = 'Anon';
+      player = player.slice(0, 12);
+      // save via DailyChallenge helper if present
+      if (window.DailyChallenge && typeof window.DailyChallenge.saveScore === 'function') {
+        const seed = window.__mm_daily_seed || Number(localStorage.getItem('mm_daily_seed')) || 0;
+        window.DailyChallenge.saveScore({ name: player, score, seed });
+        alert('Score saved locally. Check Leaderboard on the Games page.');
+        // optional: clear the seed so next visit is not forced into daily mode
+        localStorage.removeItem('mm_daily_seed');
+      } else {
+        alert('Daily leaderboard not available.');
+      }
+    });
+  }());
 
   productsElement.addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
