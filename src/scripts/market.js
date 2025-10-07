@@ -43,11 +43,24 @@ document.addEventListener('DOMContentLoaded', () => {
     balanceElement.textContent = `Balance: £${balance}`;
   }
 
+  // display seed label if present
+  (function showSeedLabel() {
+    const seed = window.__mm_daily_seed || localStorage.getItem('mm_daily_seed');
+    if (!seed) return;
+    const seedLabel = document.createElement('div');
+    seedLabel.className = 'seed-label';
+    seedLabel.textContent = `Seed: ${seed}`;
+    if (balanceElement && balanceElement.parentNode) {
+      balanceElement.parentNode.insertBefore(seedLabel, balanceElement.nextSibling);
+    }
+  }());
+
   function updateMarket() {
     productsElement.innerHTML = '';
     products.forEach(product => {
       const productElement = document.createElement('div');
       productElement.className = 'product';
+      productElement.setAttribute('data-product-name', product.name);
       const productInfo = document.createElement('span');
       productInfo.setAttribute('data-lang-en', `${product.translations.en}: £${product.price} (Available: ${product.quantity})`);
       productInfo.setAttribute('data-lang-ua', `${product.translations.ua}: £${product.price} (Доступно: ${product.quantity})`);
@@ -60,9 +73,26 @@ document.addEventListener('DOMContentLoaded', () => {
       buyButton.setAttribute('data-action', 'buy');
       productElement.appendChild(productInfo);
       productElement.appendChild(buyButton);
+      // placeholder for price change badge
+      const badge = document.createElement('span');
+      badge.className = 'price-badge';
+      productElement.appendChild(badge);
       productsElement.appendChild(productElement);
     });
     updateLanguage(localStorage.getItem('language') || 'en');
+  }
+
+  function flashPriceChange(productName, direction = 'up') {
+    const el = productsElement.querySelector(`[data-product-name="${productName}"]`);
+    if (!el) return;
+    const badge = el.querySelector('.price-badge');
+    if (!badge) return;
+    badge.textContent = direction === 'up' ? '↑' : '↓';
+    badge.classList.add(direction === 'up' ? 'price-up' : 'price-down');
+    setTimeout(() => {
+      badge.classList.remove('price-up', 'price-down');
+      badge.textContent = '';
+    }, 900);
   }
 
   function updateInventory() {
@@ -119,19 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (prod) inventoryValue += prod.price * qty;
       }
       const score = balance + inventoryValue;
-      let player = prompt('Enter your name for the leaderboard (max 12 chars):', 'Player');
-      if (!player) player = 'Anon';
-      player = player.slice(0, 12);
-      // save via DailyChallenge helper if present
-      if (window.DailyChallenge && typeof window.DailyChallenge.saveScore === 'function') {
-        const seed = window.__mm_daily_seed || Number(localStorage.getItem('mm_daily_seed')) || 0;
-        window.DailyChallenge.saveScore({ name: player, score, seed });
-        alert('Score saved locally. Check Leaderboard on the Games page.');
-        // optional: clear the seed so next visit is not forced into daily mode
-        localStorage.removeItem('mm_daily_seed');
-      } else {
-        alert('Daily leaderboard not available.');
-      }
+      // show modal summary for submit
+      openSummaryModal({ score });
     });
   }());
 
@@ -146,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBalance();
         updateMarket();
         updateInventory();
+        flashPriceChange(productName, 'up');
       }
     }
   });
@@ -164,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBalance();
         updateMarket();
         updateInventory();
+        flashPriceChange(productName, 'down');
       }
     }
   });
@@ -171,5 +192,49 @@ document.addEventListener('DOMContentLoaded', () => {
   updateBalance();
   updateMarket();
   updateInventory();
+
+  // Summary modal creation and helper
+  function createSummaryModal() {
+    const modal = document.createElement('div');
+    modal.className = 'mm-modal';
+    modal.innerHTML = `
+      <div class="mm-modal-content">
+        <h3>Session Summary</h3>
+        <p id="mm-summary-score">Score: 0</p>
+        <label>Enter name: <input id="mm-player-name" maxlength="12" value="Player"></label>
+        <div class="cta-row">
+          <button id="mm-submit-score" class="btn">Submit Score</button>
+          <button id="mm-cancel" class="btn secondary">Cancel</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    // wire buttons
+    document.getElementById('mm-cancel').addEventListener('click', () => {
+      modal.classList.remove('open');
+    });
+    document.getElementById('mm-submit-score').addEventListener('click', () => {
+      const name = (document.getElementById('mm-player-name').value || 'Anon').slice(0, 12);
+      const scoreText = document.getElementById('mm-summary-score').textContent || 'Score: 0';
+      const score = Number(scoreText.replace(/[^0-9]/g, '')) || 0;
+      if (window.DailyChallenge && typeof window.DailyChallenge.saveScore === 'function') {
+        const seed = window.__mm_daily_seed || Number(localStorage.getItem('mm_daily_seed')) || 0;
+        window.DailyChallenge.saveScore({ name, score, seed });
+        alert('Score saved locally.');
+        localStorage.removeItem('mm_daily_seed');
+      } else {
+        alert('Daily leaderboard unavailable.');
+      }
+      modal.classList.remove('open');
+    });
+    return modal;
+  }
+
+  const summaryModal = createSummaryModal();
+
+  function openSummaryModal({ score = 0 } = {}) {
+    document.getElementById('mm-summary-score').textContent = `Score: ${score}`;
+    summaryModal.classList.add('open');
+  }
 });
 
