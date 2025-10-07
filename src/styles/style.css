@@ -68,6 +68,20 @@ h2 {
   margin: 0 0 12px;
 }
 
+/* Keep headings inside cards left-aligned for readability */
+.card h1,
+.card h2,
+.card h3 {
+  text-align: left;
+}
+
+/* Center headings inside the main content area for a consistent layout */
+.main h1,
+#content h2,
+#content h3 {
+  text-align: center;
+}
+
 p {
   color: var(--muted);
   line-height: 1.7;
@@ -102,7 +116,7 @@ input:focus {
 .nav .container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* center the nav content horizontally */
 }
 
 /* Hamburger button (hidden on wide screens, visible on small screens) */
@@ -152,6 +166,7 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-content: center; /* center the nav links */
 }
 
 .nav li {
@@ -187,6 +202,8 @@ input:focus {
   background: transparent;
   color: #fff;
   cursor: pointer;
+  min-width: 58px; /* stabilize width to avoid layout jump when text changes */
+  text-align: center;
 }
 
 #language-toggle:hover {
@@ -261,6 +278,74 @@ main {
   padding: 18px;
   text-align: left;
 }
+
+/* Market page specific styles -------------------------------------------------- */
+
+/* Layout grid for the market game area */
+#game.grid {
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (width <= 900px) {
+  #game.grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Balance / player status card */
+#balance.card {
+  text-align: center;
+  font-weight: 700;
+  padding: 18px;
+  background: linear-gradient(180deg, rgb(14 165 233 / 6%), rgb(14 165 233 / 2%));
+  border: 1px solid rgb(14 165 233 / 8%);
+}
+
+/* Market product listing */
+#market .product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+#market .product {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgb(15 23 42 / 3%);
+}
+
+#market .product .meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Warehouse / inventory column */
+#warehouse #inventory {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#warehouse .item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 3%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Small helper: keep footer links unobtrusive on this page */
+
+/* (footer styles are defined globally earlier; this page doesn't need a duplicate rule) */
+
+/* End market page specific styles --------------------------------------------- */
 
 .about.card {
   margin-top: 18px;
