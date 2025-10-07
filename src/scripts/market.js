@@ -50,9 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const seedLabel = document.createElement('div');
     seedLabel.className = 'seed-label';
     seedLabel.textContent = `Seed: ${seed}`;
-    if (balanceElement && balanceElement.parentNode) {
-      balanceElement.parentNode.insertBefore(seedLabel, balanceElement.nextSibling);
+    const gameContainer = document.getElementById('game');
+    if (!gameContainer) return;
+    const parent = gameContainer.parentNode;
+    let actions = parent.querySelector('.game-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'game-actions';
+      parent.insertBefore(actions, gameContainer.nextSibling);
     }
+    actions.appendChild(seedLabel);
   }());
 
   function updateMarket() {
@@ -135,10 +142,15 @@ document.addEventListener('DOMContentLoaded', () => {
     finishBtn.id = 'finish-session';
     finishBtn.textContent = 'Finish & Submit Score';
     finishRow.appendChild(finishBtn);
-    // append to the game container so it remains visible
-    if (gameContainer) {
-      gameContainer.appendChild(finishRow);
+    // append to a dedicated actions row below the #game grid so layout stays stable
+    const parent = gameContainer.parentNode;
+    let actions = parent.querySelector('.game-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'game-actions';
+      parent.insertBefore(actions, gameContainer.nextSibling);
     }
+    actions.appendChild(finishRow);
 
     finishBtn.addEventListener('click', () => {
       // compute simple score: balance + inventory value

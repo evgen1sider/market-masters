@@ -285,6 +285,21 @@ main {
   color: inherit;
 }
 
+/* Actions row under the game grid: finish button + seed label */
+.game-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 14px 0 28px;
+  justify-content: flex-end;
+}
+
+.game-actions .seed-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .features.grid {
   margin-top: 18px;
 }
